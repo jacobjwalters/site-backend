@@ -1,12 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import Web.Scotty
-import Network.Wai.Middleware.RequestLogger (logStdoutDev)
-
-import Control.Monad (when)
 import Control.Monad.Trans (liftIO)
 import System.Directory (doesFileExist)
 import System.Random
+
+import Web.Scotty
+import Network.Wai (Middleware)
+import Network.Wai.Middleware.RequestLogger (logStdoutDev)
 
 htmlHeader :: ActionM ()
 htmlHeader = setHeader "Content-Type" "text/html;charset=utf-8"
@@ -50,12 +50,18 @@ posts = do
 pageNotFound :: ActionM ()
 pageNotFound = html "<h1>404</h1><p>Page not found!</p>"
 
-main :: IO ()
-main = scotty 3000 $ do
+app :: ScottyM ()
+app = do
     middleware logStdoutDev
+
     get "/" homePage
     get "/css/:path" css
     get "/posts" $ postList
     get "/posts/:post" posts
     --get "/:word" wordPage
+
     notFound pageNotFound
+
+main :: IO ()
+main = scotty 3000 app
+
