@@ -70,7 +70,7 @@ siteApp = scottyApp $ do
 site :: IO ()
 site = do
     app <- siteApp
-    run 80 app
+    run 3080 app
 
 siteTLS :: IO ()
 siteTLS = do
@@ -81,7 +81,7 @@ siteTLS = do
             (certPath ++ "cert.pem")
             [certPath ++ "chain.pem"]
             (certPath ++ "privkeycert.pem"))
-        (setPort 443 defaultSettings)
+        (setPort 3443 defaultSettings)
         app
 
 main :: IO ()
