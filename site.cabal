@@ -10,9 +10,11 @@ executable          site
     extensions:     OverloadedStrings
     build-depends:  base   >= 4      && < 5
                   , random
-                  , scotty
+                  , warp
+                  , warp-tls
                   , wai
                   , wai-extra
                   , wai-middleware-static
+                  , scotty
                   , directory
                   , mtl

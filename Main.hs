@@ -1,11 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+import Control.Concurrent (forkIO)
+import Control.Monad (void)
 import Control.Monad.Trans (liftIO)
 import System.Directory (doesFileExist)
 import System.Random
 
 import Web.Scotty
-import Network.Wai (Middleware)
+import Network.Wai (Application, Middleware)
+import Network.Wai.Handler.Warp (run, defaultSettings, setPort)
+import Network.Wai.Handler.WarpTLS (runTLS, tlsSettingsChain)
 import Network.Wai.Middleware.RequestLogger (logStdoutDev)
 
 htmlHeader :: ActionM ()
@@ -50,18 +54,37 @@ posts = do
 pageNotFound :: ActionM ()
 pageNotFound = html "<h1>404</h1><p>Page not found!</p>"
 
-app :: ScottyM ()
-app = do
+siteApp :: IO Application
+siteApp = scottyApp $ do
     middleware logStdoutDev
 
     get "/" homePage
+    get "/archive.html" postList
     get "/css/:path" css
-    get "/posts" $ postList
+    get "/posts" $ redirect "/archive.html"
     get "/posts/:post" posts
     --get "/:word" wordPage
 
     notFound pageNotFound
 
-main :: IO ()
-main = scotty 3000 app
+site :: IO ()
+site = do
+    app <- siteApp
+    run 80 app
 
+siteTLS :: IO ()
+siteTLS = do
+    let certPath = "/etc/letsencrypt/live/jacobwalte.rs/"
+    app <- siteApp
+    runTLS
+        (tlsSettingsChain
+            (certPath ++ "cert.pem")
+            [certPath ++ "chain.pem"]
+            (certPath ++ "privkeycert.pem"))
+        (setPort 443 defaultSettings)
+        app
+
+main :: IO ()
+main = do
+    void $ forkIO siteTLS
+    site
