@@ -80,7 +80,7 @@ siteTLS = do
         (tlsSettingsChain
             (certPath ++ "cert.pem")
             [certPath ++ "chain.pem"]
-            (certPath ++ "privkeycert.pem"))
+            (certPath ++ "privkey.pem"))
         (setPort 3443 defaultSettings)
         app
 
