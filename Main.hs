@@ -20,6 +20,11 @@ homePage = do
     htmlHeader
     file "index.html"
 
+acme :: ActionM ()
+acme = do
+    name <- param "name"
+    file $ ".well-known/acme-challenge/" ++ name
+
 css :: ActionM ()
 css = do
     path <- param "path"
@@ -60,6 +65,7 @@ siteApp = scottyApp $ do
 
     get "/" homePage
     get "/archive.html" postList
+    get "/.well-known/acme-challenge/:name" acme
     get "/css/:path" css
     get "/posts" $ redirect "/archive.html"
     get "/posts/:post" posts
