@@ -42,11 +42,6 @@ wordPage = do
     html $ mconcat [ "<h1>Scotty, ", beam, " me up!</h1>"
                    , "<p>", a, "</p>"]
 
-postList :: ActionM ()
-postList = do
-    htmlHeader
-    file "archive.html"
-
 posts :: ActionM ()
 posts = do
     htmlHeader
@@ -64,11 +59,13 @@ siteApp = scottyApp $ do
     middleware logStdoutDev
 
     get "/" homePage
-    get "/archive.html" postList
-    get "/.well-known/acme-challenge/:name" acme
     get "/css/:path" css
+    get "/archive.html" $ file "archive.html"
+    get "/about.html"   $ file "about.html"
+    get "/contact.html" $ file "contact.html"
     get "/posts" $ redirect "/archive.html"
     get "/posts/:post" posts
+    get "/.well-known/acme-challenge/:name" acme
     --get "/:word" wordPage
 
     notFound pageNotFound
