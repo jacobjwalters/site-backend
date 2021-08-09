@@ -7,7 +7,7 @@ import System.Directory (doesFileExist)
 import System.Random
 
 import Web.Scotty
-import Network.Wai (Application, Middleware)
+import Network.Wai (Application)
 import Network.Wai.Handler.Warp (run, defaultSettings, setPort)
 import Network.Wai.Handler.WarpTLS (runTLS, tlsSettingsChain)
 import Network.Wai.Middleware.RequestLogger (logStdoutDev)
