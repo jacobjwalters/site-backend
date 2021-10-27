@@ -64,6 +64,7 @@ siteApp = scottyApp $ do
     get "/about.html"   $ file "about.html"
     get "/contact.html" $ file "contact.html"
     get "/links.html"   $ file "links.html"
+    get "/links" $ redirect "/links.html"
     get "/posts" $ redirect "/archive.html"
     get "/posts/:post" posts
     get "/.well-known/acme-challenge/:name" acme
