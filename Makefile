@@ -1,3 +1,3 @@
 all:
 	stack install
-	systemctl --user restart site
+	sudo systemctl restart site
