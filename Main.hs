@@ -18,6 +18,7 @@ htmlHeader = setHeader "Content-Type" "text/html;charset=utf-8"
 homePage :: ActionM ()
 homePage = do
     htmlHeader
+    setHeader "X-Clacks-Overhead" "GNU Terry Pratchett"
     file "index.html"
 
 acme :: ActionM ()
