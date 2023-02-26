@@ -31,6 +31,11 @@ css = do
     path <- param "path"
     file $ "css/" ++ path
 
+images :: ActionM ()
+images = do
+    path <- param "path"
+    file $ "images/" ++ path
+
 wordlist = ["gamer", "test", "pog"]
 
 wordPage :: ActionM ()
@@ -61,6 +66,7 @@ siteApp = scottyApp $ do
 
     get "/" homePage
     get "/css/:path" css
+    get "/images/:path" images
     get "/archive.html" $ file "archive.html"
     get "/about.html"   $ file "about.html"
     get "/contact.html" $ file "contact.html"
